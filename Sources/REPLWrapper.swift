@@ -17,7 +17,7 @@ enum REPLState {
 }
 
 class REPLWrapper: NSObject {
-    fileprivate let command: String
+    fileprivate let command: [String]
     fileprivate var prompt: String
     fileprivate var continuePrompt: String
     fileprivate var lastOutput: String = ""
@@ -26,7 +26,7 @@ class REPLWrapper: NSObject {
     
     fileprivate let runModes = [RunLoopMode.defaultRunLoopMode]
     
-    init(command: String, prompt: String, continuePrompt: String) throws {
+    init(command: [String], prompt: String, continuePrompt: String) throws {
         self.command = command
         self.prompt = prompt
         self.continuePrompt = continuePrompt
@@ -98,25 +98,15 @@ class REPLWrapper: NSObject {
         currentTask = Shell()
         currentTask.launchPath = command
         
-        #if os(Linux)
-            NotificationCenter.default.addObserver(forName: Shell.dataAvailableNotification, object: nil, queue: nil) {
-                self.didReceivedData($0)
-            }
-        #else
-            NotificationCenter.default.addObserver(self, selector: #selector(REPLWrapper.didReceivedData(_:)),
-                                                   name: Shell.dataAvailableNotification, object: nil)
-        #endif
+        NotificationCenter.default.addObserver(forName: Shell.dataAvailableNotification, object: nil, queue: nil) {
+            self.didReceivedData($0)
+        }
         
         currentTask.waitForDataInBackgroundAndNotify(forModes: runModes)
         
-        #if os(Linux)
-            NotificationCenter.default.addObserver(forName: Shell.didTerminateNotification, object: nil, queue: nil) {
-                self.taskDidTerminated($0)
-            }
-        #else
-            NotificationCenter.default.addObserver(self, selector: #selector(REPLWrapper.taskDidTerminated(_:)),
-                                                   name: Shell.didTerminateNotification, object: nil)
-        #endif
+        NotificationCenter.default.addObserver(forName: Shell.didTerminateNotification, object: nil, queue: nil) {
+            self.taskDidTerminated($0)
+        }
         
         try currentTask.launch()
         

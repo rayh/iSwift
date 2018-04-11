@@ -16,7 +16,7 @@
 
 # Dockerfile to build a Docker image with the Swift binaries and its dependencies.
 
-FROM norionomura/sourcekit:302
+FROM swift:4.1
 
 # Set environment variables for image
 ENV HOME /root
@@ -50,7 +50,7 @@ RUN pip3 install jupyter
 COPY . ${WORK_DIR}/iSwift
 WORKDIR ${WORK_DIR}/iSwift
 
-RUN swift package update
+# RUN swift package update
 RUN swift build
 RUN jupyter kernelspec install iSwiftKernel
 
@@ -58,4 +58,4 @@ EXPOSE 8888
 
 RUN mkdir notebooks
 
-CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--NotebookApp.token=", "--ip=0.0.0.0", "--notebook-dir=notebooks"]
+CMD ["jupyter", "notebook", "--allow-root", "--port=8888", "--no-browser", "--NotebookApp.token=", "--ip=0.0.0.0", "--notebook-dir=notebooks"]

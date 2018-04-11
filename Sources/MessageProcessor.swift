@@ -21,7 +21,10 @@ class MessageProcessor {
     
     static var session: String = ""
     
-    fileprivate static let replWrapper = try! REPLWrapper(command: "/usr/bin/swift", prompt: "^\\s*\\d+>\\s*$", continuePrompt: "^\\s*\\d+\\.\\s*$")
+    fileprivate static let replWrapper = try! REPLWrapper(
+        command: ["/usr/bin/swift","-I","/usr/lib/swift/clang/include/"], // Work around swift include bug on Linux
+        prompt: "^\\s*\\d+>\\s*$",
+        continuePrompt: "^\\s*\\d+\\.\\s*$")
     
     static func run(_ inMessageQueue: BlockingQueue<Message>, outMessageQueue: BlockingQueue<Message>) {
         while true {
@@ -69,7 +72,7 @@ class MessageProcessor {
                 
                 Logger.debug.print("Sending sourcekitten request -- \(r)")
                 
-                let completionItems = CodeCompletionItem.parse(response: r.send())
+                let completionItems = CodeCompletionItem.parse(response: try! r.send())
                 let matches = completionItems.flatMap { $0.descriptionKey }
                 let cursorEnd = content.cursorPosition
                 let cursorStartOffset = completionItems.first?.numBytesToErase ?? 0

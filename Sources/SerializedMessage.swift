@@ -16,38 +16,42 @@ struct SerializedMessage {
     let metadata: Data
     let content: Data
     let extraBlobs: [Data]
-    
+
     func toMessage() throws -> Message {
-        
+
         func parse<T>(_ str: Data, converter: (([String: Any]) -> T?)) throws -> T {
             guard let json = str.toJSON() else {
                 print(str)
                 throw Error.socketError("Parse \(str) to JSON failed.")
             }
-            
+            print("Parsed JSON \(json)")
+
             guard let re = converter(json) else {
                 throw Error.socketError("Parse JSON to \(T.self) failed.")
             }
-            
+
             return re
         }
-        
+
         // Must have a header.
-        Logger.debug.print("Parsing header...")
+        Logger.debug.print("Parsing header: \(header)")
         let h = try parse(header, converter: Header.fromJSON)
-        
+        Logger.debug.print("Parsed header \(h)")
+
         // May not have a parent header.
-        Logger.debug.print("Parsing parent header...")
+        Logger.debug.print("Parsing parent header: \(parentHeader)")
         let pStr = try parse(parentHeader) { $0 }
         let p = Header.fromJSON(pStr)
-        
+        Logger.debug.print("Parsed parent header: \(p)")
+
         // Can be an empty metadata.
-        Logger.debug.print("Parsing metadata...")
+        Logger.debug.print("Parsing metadata: \(metadata)")
         let m = try parse(metadata) { $0 }
-        
+        Logger.debug.print("Parsed metadata: \(m)")
+
         // For content, it's a bit complicated.
-        Logger.debug.print("Parsing content...")
-        
+        Logger.debug.print("Parsing content: \(content)")
+
         let converter: ([String: Any]) -> Contentable?
         switch h.msgType {
         case .KernelInfoRequest:
@@ -63,21 +67,22 @@ struct SerializedMessage {
         case .CompleteRequest:
             converter = CompleteRequest.fromJSON
         default:
-            throw Error.socketError("Undefined message content.")
+            throw Error.socketError("Unhandled message type \(h.msgType)")
         }
-        
+
         let c = try parse(content, converter: converter)
-        
+        Logger.debug.print("Parsed content: \(c)")
+
         return Message(idents: idents, header: h, parentHeader: p, metadata: m, content: c, extraBlobs: extraBlobs)
     }
-    
+
     static func fromMessage(_ message: Message, key: String) -> SerializedMessage {
         let h = message.header.toData()
         let p = message.parentHeader?.toData() ?? Message.EmptyDic.toData()
         let m = message.metadata.toData()
         let c = message.content.toData()
         let s = SHA256(key: key, dataList: [h, p, m, c]).hexDigest()
-        
+
         return SerializedMessage(idents: message.idents, signature: s, header: h, parentHeader: p, metadata: m, content: c, extraBlobs: message.extraBlobs)
     }
 }
