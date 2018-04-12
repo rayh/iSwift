@@ -77,13 +77,13 @@ RUN cd /tmp/ \
     && tar xf /tmp/zeromq-4.1.4.tar.gz \
     && cd /tmp/zeromq-4.1.4 \
     && ./configure --without-libsodium \
-    && make \
+    && make \ v
     && make install \
     && ldconfig
 
 COPY . ${WORK_DIR}/iSwift
 WORKDIR ${WORK_DIR}/iSwift
-# RUN swift package update
+RUN swift package update
 RUN swift build
 RUN jupyter kernelspec install iSwiftKernel
 
