@@ -1,12 +1,3 @@
-# Update 2018-01-29
-
-I had to shut down the Demo server because someone is using it to mine bitcoins. (by default, jupyter will allow anyone to create a terminal and there's no way to disable it easily.) If anyone is interested in setting it up locally, I'm glad to help.
-
-
-# iSwift
-
-[![Build Status](https://travis-ci.org/KelvinJin/iSwift.svg?branch=master)](https://travis-ci.org/KelvinJin/iSwift)
-
 iSwift is the kernel IPython/Notebook implementation for Swift programming language.
 
 It can:
@@ -16,16 +7,28 @@ It can:
   + Support encryption.
   + Support Linux/macOS
 
+This project is based off [KelvinJin/iSwift](https://github.com/KelvinJin/iSwift) but makes a few changes:
+  + Updates to support Swift 4.1
+  + Base the docker image off jupyter/minimal-notebook
+
+## Quick Start
+
+The preferred way of using this is via the [docker image](https://hub.docker.com/r/rayh/swift-notebook/), either locally or in jupyterhub/binderhub
+
+```bash
+$ docker run -t -i -p 8888:8888 --privileged rayh/swift-notebook
+```
+
+And open the link you see in the console, which will start Jupyter, from there you can select `New` -> `Swift`
+
 ## Demo
 
-~http://jupyter.uthoft.com~
-
-![Imgur](http://i.imgur.com/9NpJckS.gif)
+You can demo a version of this on binderhub here:
 
 ## Requirements
 
   + macOS/Linux
-  + Swift 3.0
+  + Swift 4.1
   + ZMQ
   + Jupyter 5.0
 

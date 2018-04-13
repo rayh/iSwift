@@ -77,7 +77,7 @@ RUN cd /tmp/ \
     && tar xf /tmp/zeromq-4.1.4.tar.gz \
     && cd /tmp/zeromq-4.1.4 \
     && ./configure --without-libsodium \
-    && make \ v
+    && make \ 
     && make install \
     && ldconfig
 
