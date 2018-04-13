@@ -3,7 +3,6 @@ FROM jupyter/minimal-notebook:latest
 USER root
 
 # Set environment variables for image
-ENV HOME /root
 ENV WORK_DIR /root
 
 # Set WORKDIR
@@ -77,7 +76,7 @@ RUN cd /tmp/ \
     && tar xf /tmp/zeromq-4.1.4.tar.gz \
     && cd /tmp/zeromq-4.1.4 \
     && ./configure --without-libsodium \
-    && make \ 
+    && make \
     && make install \
     && ldconfig
 
