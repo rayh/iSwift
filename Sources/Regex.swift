@@ -39,10 +39,15 @@ struct Regex {
 
 
 extension String {
+    
+    /// NSRange of the full string.
+    private var fullRange: NSRange {
+        return NSRange(self.startIndex..<self.endIndex, in: self)
+    }
+    
     func matchRegex(_ pattern: Regex) -> Bool {
-        let range: NSRange = NSMakeRange(0, utf8.count)
         if let regex = pattern.regex {
-            let matches = regex.matches(in: self, options: pattern.matchingOptions, range: range)
+            let matches = regex.matches(in: self, options: pattern.matchingOptions, range: self.fullRange)
             return matches.count > 0
         }
         return false
@@ -53,11 +58,8 @@ extension String {
     }
 
     func replaceRegex(_ pattern: Regex, template: String) -> String {
-        if self.matchRegex(pattern) {
-            let range: NSRange = NSMakeRange(0, utf8.count)
-            if let regex = pattern.regex {
-                return regex.stringByReplacingMatches(in: self, options: pattern.matchingOptions, range: range, withTemplate: template)
-            }
+        if self.matchRegex(pattern), let regex = pattern.regex {
+            return regex.stringByReplacingMatches(in: self, options: pattern.matchingOptions, range: self.fullRange, withTemplate: template)
         }
         return self
     }
