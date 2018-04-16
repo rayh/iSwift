@@ -2,11 +2,8 @@ FROM jupyter/minimal-notebook:latest
 
 USER root
 
-# Set environment variables for image
-ENV WORK_DIR /root
-
 # Set WORKDIR
-WORKDIR ${WORK_DIR}
+WORKDIR /root
 
 # Install related packages and set LLVM 3.8 as the compiler
 RUN apt-get -q update && \
@@ -80,12 +77,13 @@ RUN cd /tmp/ \
     && make install \
     && ldconfig
 
-COPY . ${WORK_DIR}/iSwift
-WORKDIR ${WORK_DIR}/iSwift
+RUN mkdir -p /kernels
+COPY . /kernels/iSwift
+WORKDIR /kernels/iSwift
 RUN swift package update
 RUN swift build
 RUN jupyter kernelspec install iSwiftKernel
-RUN chown -R ${NB_USER} ${WORK_DIR}/iSwift
+RUN chown -R ${NB_USER} /kernels/iSwift
 
 USER ${NB_USER}
 WORKDIR /home/${NB_USER}
