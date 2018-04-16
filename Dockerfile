@@ -85,7 +85,7 @@ WORKDIR ${WORK_DIR}/iSwift
 RUN swift package update
 RUN swift build
 RUN jupyter kernelspec install iSwiftKernel
+RUN chown -R ${NB_USER} ${WORK_DIR}/iSwift
 
-RUN chown -R ${NB_USER} ${HOME}
 USER ${NB_USER}
 WORKDIR /home/${NB_USER}
