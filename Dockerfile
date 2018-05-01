@@ -77,13 +77,21 @@ RUN cd /tmp/ \
     && make install \
     && ldconfig
 
+# Build swift kernel executable as root in /kernels/iSwift
 RUN mkdir -p /kernels
 COPY . /kernels/iSwift
 WORKDIR /kernels/iSwift
 RUN swift package update
 RUN swift build
-RUN jupyter kernelspec install iSwiftKernel
+
+# But install the kernelspec into jupyter as the NB_USER
+USER ${NB_USER}
+RUN jupyter kernelspec install --user /kernels/iSwift/iSwiftKernel
+
+# Change the Swift kernel executable to be onwed by NB_USER, so we can run it
+USER root
 RUN chown -R ${NB_USER} /kernels/iSwift
+USER $NB_USER
 
 USER ${NB_USER}
 WORKDIR /home/${NB_USER}
