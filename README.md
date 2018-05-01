@@ -16,7 +16,7 @@ This project is based off [KelvinJin/iSwift](https://github.com/KelvinJin/iSwift
 The preferred way of using this is via the [docker image](https://hub.docker.com/r/rayh/swift-notebook/), either locally or in jupyterhub/binderhub
 
 ```bash
-$ docker run -t -i -p 8888:8888 --privileged rayh/swift-notebook
+$ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook
 ```
 
 And open the link you see in the console, which will start Jupyter, from there you can select `New` -> `Swift`
