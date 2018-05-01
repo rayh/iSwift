@@ -1,2 +1,2 @@
 #!/bin/sh
-exec docker build -t algal/swift-notebook
+exec docker build -t algal/swift-notebook .
