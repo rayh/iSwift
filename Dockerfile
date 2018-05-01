@@ -5,6 +5,12 @@ USER root
 # Set WORKDIR
 WORKDIR /root
 
+# These apt-get packages are the only unpinned dependencies, so they are presumably
+# the only elements in the image build process that introduce the risk of
+# non-reproducibility. That is, they could in theory change in a way that
+# broke backward compatibility, and caused subsequent builds of the docker image
+# to function differently.
+
 # Install related packages and set LLVM 3.8 as the compiler
 RUN apt-get -q update && \
     apt-get -q install -y \
