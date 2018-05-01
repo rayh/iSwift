@@ -84,8 +84,14 @@ RUN cd /tmp/ \
     && ldconfig
 
 # Build swift kernel executable as root in /kernels/iSwift
-RUN mkdir -p /kernels
-COPY . /kernels/iSwift
+RUN mkdir -p /kernels/iSwift
+# copy only the Swift package itself and iSwiftKernel, so that we don't
+# trigger image rebuilds when we edit docs or pieces of the Dockerfile
+# itself which are irrelevant to the image
+COPY Includes /kernels/iSwift/Includes/
+COPY Package.swift /kernels/iSwift/
+COPY Sources iSwiftKernel /kernels/iSwift/Sources/
+COPY iSwiftKernel /kernels/iSwift/iSwiftKernel/
 WORKDIR /kernels/iSwift
 RUN swift package update
 RUN swift build
