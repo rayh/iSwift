@@ -11,9 +11,16 @@ This project is based off [KelvinJin/iSwift](https://github.com/KelvinJin/iSwift
   + Updates to support Swift 4.1
   + Base the docker image off jupyter/minimal-notebook
 
+Note: This is rough work-in-progress. What you're looking at is
+unlikely to be the latest and greatest. I'd suggest checking the
+[Swift for TensorFlow google
+group](https://groups.google.com/a/tensorflow.org/forum/?utm_source=digest&utm_medium=email/#!topic/swift/5fr5h1SWzzE),
+and the [fork tree](https://github.com/KelvinJin/iSwift/network) from
+KelvinJin's original verison, to understand what is the best version of this.
+
 ## Quick Start
 
-The preferred way of using this is via the [docker image](https://hub.docker.com/r/rayh/swift-notebook/), either locally or in jupyterhub/binderhub
+The easiest way of using this is via the [docker image](https://hub.docker.com/r/algalgal/swift-notebook/), either locally or in jupyterhub/binderhub
 
 ```bash
 $ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook
@@ -21,9 +28,6 @@ $ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook
 
 And open the link you see in the console, which will start Jupyter, from there you can select `New` -> `Swift`
 
-## Demo
-
-You can demo a version of this on binderhub here:
 
 ## Requirements
 
