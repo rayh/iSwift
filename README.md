@@ -20,14 +20,15 @@ KelvinJin's original verison, to understand what is the best version of this.
 
 ## Quick Start
 
-The easiest way of using this is via the [docker image](https://hub.docker.com/r/algalgal/swift-notebook/), either locally or in jupyterhub/binderhub
+The easiest way of using this is via the [docker image](https://hub.docker.com/r/algalgal/swift-notebook/), which is already built and hosted on docker hub. Assuming you have docker installed on your machine, all you need to do is run:
 
 ```bash
-$ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook
+$ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook:1
 ```
 
-And open the link you see in the console, which will start Jupyter, from there you can select `New` -> `Swift`
+This will download the image if needed, and then run it, starting Jupyter. 
 
+Then copy and paste the URL from the console into your browser to access the notebook. From there you can select `New` -> `Swift`
 
 ## Requirements
 
