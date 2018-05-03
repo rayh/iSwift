@@ -23,14 +23,18 @@ KelvinJin's original verison, to understand what is the best version of this.
 The easiest way of using this is via the [docker image](https://hub.docker.com/r/algalgal/swift-notebook/), which is already built and hosted on docker hub. Assuming you have docker installed on your machine, all you need to do is run:
 
 ```bash
-$ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook:1
+$ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook:b767ba373ced
 ```
 
-This will download the image if needed, and then run it, starting Jupyter. 
+This will download the image if needed, and then run it, starting Jupyter. (FYI, this runs an image based roughly on the github repo commit `6a08a20`.)
 
-Then copy and paste the URL from the console into your browser to access the notebook. From there you can select `New` -> `Swift`
+Then copy and paste the URL from the console into your browser to access the notebook. From there you can select `New` -> `Swift`.
+
+To build and run images locally, you can use the helper scripts `build-jupyter-swift-notebook.sh` and `run-jupyter-swift-notebook.sh`.
 
 ## Requirements
+
+These are requirement if you do not want to use docker:
 
   + macOS/Linux
   + Swift 4.1
