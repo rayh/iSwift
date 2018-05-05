@@ -11,21 +11,30 @@ This project is based off [KelvinJin/iSwift](https://github.com/KelvinJin/iSwift
   + Updates to support Swift 4.1
   + Base the docker image off jupyter/minimal-notebook
 
+Note: This is rough work-in-progress. What you're looking at is
+unlikely to be the latest and greatest. I'd suggest checking the
+[Swift for TensorFlow google
+group](https://groups.google.com/a/tensorflow.org/forum/?utm_source=digest&utm_medium=email/#!topic/swift/5fr5h1SWzzE),
+and the [fork tree](https://github.com/KelvinJin/iSwift/network) from
+KelvinJin's original verison, to understand what is the best version of this.
+
 ## Quick Start
 
-The preferred way of using this is via the [docker image](https://hub.docker.com/r/rayh/swift-notebook/), either locally or in jupyterhub/binderhub
+The easiest way of using this is via the [docker image](https://hub.docker.com/r/algalgal/swift-notebook/), which is already built and hosted on docker hub. Assuming you have docker installed on your machine, all you need to do is run:
 
 ```bash
-$ docker run -t -i -p 8888:8888 --privileged rayh/swift-notebook
+$ docker run -t -i -p 8888:8888 --privileged algalgal/swift-notebook:b767ba373ced
 ```
 
-And open the link you see in the console, which will start Jupyter, from there you can select `New` -> `Swift`
+This will download the image if needed, and then run it, starting Jupyter. (FYI, this runs an image based roughly on the github repo commit `6a08a20`.)
 
-## Demo
+Then copy and paste the URL from the console into your browser to access the notebook. From there you can select `New` -> `Swift`.
 
-You can demo a version of this on binderhub here:
+To build and run images locally, you can use the helper scripts `build-jupyter-swift-notebook.sh` and `run-jupyter-swift-notebook.sh`.
 
 ## Requirements
+
+These are requirement if you do not want to use docker:
 
   + macOS/Linux
   + Swift 4.1

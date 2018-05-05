@@ -1,9 +1,16 @@
-FROM jupyter/minimal-notebook:latest
+FROM jupyter/minimal-notebook:1af3089901bb
+#FROM jupyter/tensorflow-notebook:1af3089901bb
 
 USER root
 
 # Set WORKDIR
 WORKDIR /root
+
+# These apt-get packages are the only unpinned dependencies, so they are presumably
+# the only elements in the image build process that introduce the risk of
+# non-reproducibility. That is, they could in theory change in a way that
+# broke backward compatibility, and caused subsequent builds of the docker image
+# to function differently.
 
 # Install related packages and set LLVM 3.8 as the compiler
 RUN apt-get -q update && \
@@ -77,13 +84,27 @@ RUN cd /tmp/ \
     && make install \
     && ldconfig
 
-RUN mkdir -p /kernels
-COPY . /kernels/iSwift
+# Build swift kernel executable as root in /kernels/iSwift
+RUN mkdir -p /kernels/iSwift
+# copy only the Swift package itself and iSwiftKernel, so that we don't
+# trigger image rebuilds when we edit docs or pieces of the Dockerfile
+# itself which are irrelevant to the image
+COPY Includes /kernels/iSwift/Includes/
+COPY Package.swift /kernels/iSwift/
+COPY Sources iSwiftKernel /kernels/iSwift/Sources/
+COPY iSwiftKernel /kernels/iSwift/iSwiftKernel/
 WORKDIR /kernels/iSwift
 RUN swift package update
 RUN swift build
-RUN jupyter kernelspec install iSwiftKernel
+
+# But install the kernelspec into jupyter as the NB_USER
+USER ${NB_USER}
+RUN jupyter kernelspec install --user /kernels/iSwift/iSwiftKernel
+
+# Change the Swift kernel executable to be onwed by NB_USER, so we can run it
+USER root
 RUN chown -R ${NB_USER} /kernels/iSwift
+USER $NB_USER
 
 USER ${NB_USER}
 WORKDIR /home/${NB_USER}
